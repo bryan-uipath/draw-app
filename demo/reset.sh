@@ -9,7 +9,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
-BRANCHES=(feat/notes-model feat/notes-ui feat/notes-persist test/notes)
+BRANCHES=(feat/notes-model feat/notes-ui feat/notes-persist test/notes fix/smooth-strokes)
 
 echo "→ Returning to main…"
 git checkout main 2>/dev/null
