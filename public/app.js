@@ -1,5 +1,6 @@
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
+ctx.fillStyle = "#22d3ee"; // cyan pen — visible on the dark board
 let drawing = false;
 
 const draw = (x, y) => ctx.fillRect(x, y, 3, 3);

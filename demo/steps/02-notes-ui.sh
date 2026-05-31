@@ -1,3 +1,32 @@
+#!/usr/bin/env bash
+# PR 2 — feat/notes-ui: add-note button + render notes on the canvas (local only).
+set -euo pipefail
+cd "$(dirname "$0")/../.."
+
+cat > public/notes-ui.js <<'EOF'
+const board = document.getElementById("board");
+
+const renderNote = ({ text, x, y }) => {
+  const el = document.createElement("div");
+  el.className = "note";
+  el.textContent = text;
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  board.appendChild(el);
+};
+
+document.getElementById("add-note").addEventListener("click", () => {
+  const text = prompt("Note text:");
+  if (!text) return;
+  renderNote({
+    text,
+    x: 40 + Math.round(Math.random() * 600),
+    y: 40 + Math.round(Math.random() * 360),
+  });
+});
+EOF
+
+cat > public/index.html <<'EOF'
 <!doctype html>
 <html lang="en" class="future-dark">
   <head>
@@ -50,6 +79,19 @@
         letter-spacing: -0.35px;
         margin-top: 4px;
       }
+      button#add-note {
+        font: inherit;
+        font-weight: 500;
+        letter-spacing: -0.35px;
+        background: var(--brand);
+        color: #fafafa;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 16px;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      button#add-note:hover { background: var(--brand-hover); color: #09090b; }
       #board {
         position: relative;
         width: 800px;
@@ -71,6 +113,18 @@
         cursor: crosshair;
         box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.35);
       }
+      .note {
+        position: absolute;
+        max-width: 160px;
+        padding: 10px 12px;
+        background: #ffd400;
+        color: #09090b;
+        border-radius: 4px;
+        box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+        font-size: 14px;
+        letter-spacing: -0.3px;
+        transform: rotate(-2deg);
+      }
     </style>
   </head>
   <body>
@@ -79,10 +133,15 @@
         <h1>draw<span class="accent">·</span>app</h1>
         <div class="subtitle">a tiny canvas — demo sandbox for stacked PRs</div>
       </div>
+      <button id="add-note">+ Add note</button>
     </header>
     <div id="board">
       <canvas id="c" width="800" height="500"></canvas>
     </div>
     <script type="module" src="/app.js"></script>
+    <script type="module" src="/notes-ui.js"></script>
   </body>
 </html>
+EOF
+
+echo "✓ wrote public/notes-ui.js + public/index.html  (feat/notes-ui)"
