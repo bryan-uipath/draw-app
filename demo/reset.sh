@@ -22,6 +22,12 @@ for b in "${BRANCHES[@]}"; do
   git branch -D "$b" 2>/dev/null && echo "  deleted local: $b" || true
 done
 
+# `us extract`/`reparent` use temporary tmp*/ branches; clean any that leaked
+# from an interrupted run.
+for b in $(git branch --format='%(refname:short)' | grep -E '^tmp[0-9]*/' || true); do
+  git branch -D "$b" 2>/dev/null && echo "  deleted leaked: $b" || true
+done
+
 echo "→ Clearing local us state…"
 rm -f .git/us/us.db .git/us/us-restack-state.json .git/us/command-log
 
