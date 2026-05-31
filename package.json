@@ -1,0 +1,10 @@
+{
+  "name": "draw-app",
+  "version": "0.1.0",
+  "description": "A tiny canvas drawing app — demo sandbox for stacked PRs",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  }
+}
