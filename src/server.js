@@ -10,11 +10,13 @@ let notes = createNotesStore();
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" };
 
+// This function sends JSON
 const sendJson = (res, data) => {
   res.setHeader("content-type", "application/json");
   res.end(JSON.stringify(data));
 };
 
+// This function reads the body
 const readBody = (req) =>
   new Promise((resolve) => {
     let body = "";
