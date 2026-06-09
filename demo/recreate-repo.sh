@@ -34,6 +34,10 @@ for b in $(git branch --format='%(refname:short)' | grep -vx main || true); do
 done
 git fetch --prune origin >/dev/null 2>&1 || true
 
+# Clear the local us database too — it holds stale branch parents and PR
+# numbers that won't exist after the repo is recreated.
+rm -f .git/us/us.db .git/us/us-restack-state.json .git/us/command-log
+
 # 3. Confirm (destructive + outward-facing).
 if [ "${FORCE:-}" != "1" ]; then
   echo "⚠️  This DELETES github.com/$REPO and recreates it from local main."
