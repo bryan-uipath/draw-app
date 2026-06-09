@@ -41,7 +41,7 @@ play "us tree" 1.8
 note "The earliest PR needs another fix. Jump to the root:"
 play "us prev 3" 0.7
 code bash demo/steps/00b-root-cap.sh
-play "git commit -aqm 'fix: cap stroke history so it can't grow unbounded'" 0.7
+play "git commit -aqm 'fix: cap stroke history to bound memory'" 0.7
 
 note "One command re-stacks the entire chain on top of the fix ⚡"
 play "us restack" 2.0
