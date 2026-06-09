@@ -50,6 +50,19 @@
         letter-spacing: -0.35px;
         margin-top: 4px;
       }
+      button#add-note {
+        font: inherit;
+        font-weight: 500;
+        letter-spacing: -0.35px;
+        background: var(--brand);
+        color: #fafafa;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 16px;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      button#add-note:hover { background: var(--brand-hover); color: #09090b; }
       #board {
         position: relative;
         width: 800px;
@@ -71,6 +84,18 @@
         cursor: crosshair;
         box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.35);
       }
+      .note {
+        position: absolute;
+        max-width: 160px;
+        padding: 10px 12px;
+        background: #ffd400;
+        color: #09090b;
+        border-radius: 4px;
+        box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+        font-size: 14px;
+        letter-spacing: -0.3px;
+        transform: rotate(-2deg);
+      }
     </style>
   </head>
   <body>
@@ -79,10 +104,12 @@
         <h1>draw<span class="accent">·</span>app</h1>
         <div class="subtitle">a tiny canvas — demo sandbox for stacked PRs</div>
       </div>
+      <button id="add-note">+ Add note</button>
     </header>
     <div id="board">
       <canvas id="c" width="800" height="500"></canvas>
     </div>
     <script type="module" src="/app.js"></script>
+    <script type="module" src="/notes-ui.js"></script>
   </body>
 </html>
