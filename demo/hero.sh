@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 #
-# Self-playing HERO demo — the recorded tail (~20s) for a README GIF (Gifox).
-# Pre-build the stack first with `demo/hero-setup.sh`, then record this.
+# Self-playing HERO demo for a README GIF (Gifox) — STANDALONE.
+# Builds the stack itself, waits for you to start recording, then plays:
+#   us tree → us prev 2 (the earliest PR) → fix the root → us restack (cascade) → us pr
 #
-# The story: a 3-PR stack, fix the EARLIEST PR, and one command re-stacks the
-# whole chain — then update every PR at once.
+#   1) bash demo/hero.sh        # builds the 3-PR stack, then prompts you
+#   2) start your Gifox recording over the terminal, press Enter
+#   3) afterwards: bash demo/reset.sh
 #
-#   1) bash demo/hero-setup.sh   # build the 3-PR stack
-#   2) start Gifox over the terminal
-#   3) bash demo/hero.sh
-#   4) stop recording, then `bash demo/reset.sh` to clean up
-#
-# Knobs:  SPEED=2 (faster typing)   DRY=1 (`us pr --dry-run`, no network)
+# Knobs:  SPEED=2 (faster typing)   DRY=1 (no GitHub — `us pr --dry-run`)
 #
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -32,9 +29,26 @@ play() {
 note() { printf "\n%s# %s%s\n" "$DIM" "$1" "$RST"; nap 0.6; }
 code() { "$@" >/dev/null 2>&1; }
 
+# --- Build the stack off-camera: fix/blocking-notes-bug → notes-model → notes-ui
+printf "Building the demo stack…\n"
+bash demo/reset.sh >/dev/null 2>&1 || true
+$US home >/dev/null
+$US branch fix/blocking-notes-bug >/dev/null
+code bash demo/steps/00-blocking-bug.sh; git commit -aqm "fix: skip duplicate stroke points"
+$US branch feat/notes-model >/dev/null
+code bash demo/steps/01-notes-model.sh; git commit -aqm "feat: sticky-note model + /api/notes endpoint"
+$US branch feat/notes-ui >/dev/null
+code bash demo/steps/02-notes-ui.sh; git add -A; git commit -qm "feat: add-note button + rendering"
+
+# --- Wait for the recording to start
+clear
+printf "%s✦ Stack ready — you're on feat/notes-ui (top of a 3-PR stack).%s\n\n" "$CY" "$RST"
+printf "  ▶︎  Start your Gifox recording over this terminal,\n     then press %sEnter%s to play the demo…" "$CY" "$RST"
+read -r || true
 clear
 nap 0.6
 
+# --- The recorded demo
 note "A 3-PR stack — built bottom-up on a root bugfix"
 play "us tree" 1.8
 
@@ -47,12 +61,12 @@ note "One command re-stacks the entire chain on top of the fix ⚡"
 play "us restack" 2.0
 play "us tree" 1.8
 
-note "…and update every PR in the stack at once"
+note "…then publish the whole stack — correct bases + stack comments"
 if [ "${DRY:-}" = "1" ]; then
   play "us pr --dry-run" 2.5
 else
   play "us pr" 2.5
 fi
 
-printf "\n%s❯%s %sone root fix → the whole stack, re-based and re-published.%s\n\n" "$CY" "$RST" "$DIM" "$RST"
+printf "\n%s❯%s %sone root fix → the whole stack, re-based and published.%s\n\n" "$CY" "$RST" "$DIM" "$RST"
 nap 1.2
