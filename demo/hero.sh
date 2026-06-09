@@ -11,7 +11,7 @@
 #   3) bash demo/hero.sh
 #   4) stop recording, then `bash demo/reset.sh` to clean up
 #
-# Knobs:  SPEED=2 (faster typing)   DRY=1 (`us pr --all --dry-run`, no network)
+# Knobs:  SPEED=2 (faster typing)   DRY=1 (`us pr --dry-run`, no network)
 #
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -49,9 +49,9 @@ play "us tree" 1.8
 
 note "…and update every PR in the stack at once"
 if [ "${DRY:-}" = "1" ]; then
-  play "us pr --all --dry-run" 2.5
+  play "us pr --dry-run" 2.5
 else
-  play "us pr --all" 2.5
+  play "us pr" 2.5
 fi
 
 printf "\n%s❯%s %sone root fix → the whole stack, re-based and re-published.%s\n\n" "$CY" "$RST" "$DIM" "$RST"

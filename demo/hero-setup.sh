@@ -38,7 +38,7 @@ git add -A && git commit -qm "feat: add a Clear button"
 
 if [ "${DRY:-}" != "1" ]; then
   echo "→ Publishing 4 PRs…"
-  $US pr --all
+  $US pr
 fi
 
 $US tree
