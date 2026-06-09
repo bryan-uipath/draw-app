@@ -34,6 +34,11 @@ const server = createServer(async (req, res) => {
 
   // --- More API routes get added here by stacked feature branches ---
 
+  if (url === "/api/strokes" && method === "DELETE") {
+    strokes = createStore();
+    return sendJson(res, { ok: true });
+  }
+
   // --- Static files from public/ ---
   const path = url === "/" ? "/index.html" : url;
   try {

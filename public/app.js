@@ -28,11 +28,25 @@ canvas.addEventListener("mouseup", () => (drawing = false));
 canvas.addEventListener("mouseleave", () => (drawing = false));
 canvas.addEventListener("mousemove", (e) => {
   if (!drawing) return;
-  lineTo(e.offsetX, e.offsetY); // connect points — continuous line, no gaps
+  lineTo(e.offsetX, e.offsetY);
   fetch("/api/strokes", {
     method: "POST",
     body: JSON.stringify({ x: e.offsetX, y: e.offsetY }),
   });
+});
+
+// Clear button — wipe the canvas and reset strokes on the server.
+const clearBtn = document.createElement("button");
+clearBtn.textContent = "Clear";
+clearBtn.style.cssText =
+  "font:inherit;font-weight:500;letter-spacing:-0.35px;background:#27272a;" +
+  "color:#fafafa;border:1px solid #27272a;border-radius:8px;padding:9px 16px;cursor:pointer;";
+clearBtn.addEventListener("mouseenter", () => (clearBtn.style.background = "#3f3f46"));
+clearBtn.addEventListener("mouseleave", () => (clearBtn.style.background = "#27272a"));
+document.querySelector("header").appendChild(clearBtn);
+clearBtn.addEventListener("click", async () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  await fetch("/api/strokes", { method: "DELETE" });
 });
 
 // Replay saved strokes on load.
