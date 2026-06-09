@@ -3,10 +3,10 @@
 # Self-playing HERO demo — the recorded tail (~20s) for a README GIF (Gifox).
 # Pre-build the stack first with `demo/hero-setup.sh`, then record this.
 #
-# The story: a 4-PR stack, fix the EARLIEST PR, and one command re-stacks the
+# The story: a 3-PR stack, fix the EARLIEST PR, and one command re-stacks the
 # whole chain — then update every PR at once.
 #
-#   1) bash demo/hero-setup.sh   # build the 4-PR stack
+#   1) bash demo/hero-setup.sh   # build the 3-PR stack
 #   2) start Gifox over the terminal
 #   3) bash demo/hero.sh
 #   4) stop recording, then `bash demo/reset.sh` to clean up
@@ -35,11 +35,11 @@ code() { "$@" >/dev/null 2>&1; }
 clear
 nap 0.6
 
-note "A 4-PR stack — built bottom-up on a root bugfix"
+note "A 3-PR stack — built bottom-up on a root bugfix"
 play "us tree" 1.8
 
 note "The earliest PR needs another fix. Jump to the root:"
-play "us prev 3" 0.7
+play "us prev 2" 0.7
 code bash demo/steps/00b-root-cap.sh
 play "git commit -aqm 'fix: cap stroke history to bound memory'" 0.7
 

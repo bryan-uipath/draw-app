@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# Pre-build the 4-PR hero stack. Run this BEFORE recording, then run
+# Pre-build the hero stack. Run this BEFORE recording, then run
 # `demo/hero.sh` while recording.
 #
-#   fix/blocking-notes-bug   (root, on main)
+#   fix/blocking-notes-bug   (root / earliest PR, on main)
 #   └── feat/notes-model
-#       └── feat/notes-ui
-#           └── feat/clear-button   ← you end up here
+#       └── feat/notes-ui    ← you end up here (the top)
 #
-# Creates 4 real PRs on GitHub (so `us tree` shows live statuses). DRY=1 skips
+# `us prev 2` from the top lands on the earliest PR (fix/blocking-notes-bug).
+# Creates real PRs on GitHub (so `us tree` shows live statuses). DRY=1 skips
 # publishing (local only). Run `bash demo/reset.sh` afterward to clean up.
 #
 set -euo pipefail
@@ -32,16 +32,12 @@ $US branch feat/notes-ui >/dev/null
 bash demo/steps/02-notes-ui.sh >/dev/null
 git add -A && git commit -qm "feat: add-note button + rendering"
 
-$US branch feat/clear-button >/dev/null
-bash demo/steps/06-clear-button.sh >/dev/null
-git add -A && git commit -qm "feat: add a Clear button"
-
 if [ "${DRY:-}" != "1" ]; then
-  echo "→ Publishing 4 PRs…"
+  echo "→ Publishing the stack…"
   $US pr
 fi
 
 $US tree
 echo
-echo "✓ 4-PR stack ready (you're on feat/clear-button)."
+echo "✓ Stack ready (you're on feat/notes-ui, the top)."
 echo "  Start recording, then run:  bash demo/hero.sh"
